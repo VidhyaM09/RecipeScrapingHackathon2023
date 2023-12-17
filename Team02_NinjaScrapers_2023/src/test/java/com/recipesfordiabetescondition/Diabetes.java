@@ -246,6 +246,7 @@ public class Diabetes extends BaseClass {
 				driver.navigate().back();
 			}
 		}
+		driver.quit();
 	}
 
 	public static void main(String[] args) throws Throwable {

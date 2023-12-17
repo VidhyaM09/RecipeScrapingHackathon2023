@@ -300,7 +300,7 @@ public class PCOS extends BaseClass {
 				if ((!isElimIngredExists) && (isAllergyIngredientExists)) {
 					System.out.println("Added to excel " + recipeName);
 					PCOSExcelWriter excelWriter = new PCOSExcelWriter();
-					excelWriter.WriteData("Sheet1", 0, Excelcolumn2++, RecipeId, recipeName, RecipeCategory,
+					excelWriter.WriteData("AllergyToAdd", 0, Excelcolumn2++, RecipeId, recipeName, RecipeCategory,
 							ingredientList, prepTime, cookingTime, prepMethod, nutrientValue, targetCondition, url,
 							path2);
 				}
@@ -308,7 +308,7 @@ public class PCOS extends BaseClass {
 				if ((!isElimIngredExists) && (isnutsAllergyIngredientExists)) {
 					System.out.println("Added to excel " + recipeName);
 					PCOSExcelWriter excelWriter = new PCOSExcelWriter();
-					excelWriter.WriteData("Sheet1", 0, Excelcolumn3++, RecipeId, recipeName, RecipeCategory,
+					excelWriter.WriteData("NutsAllergyToAdd", 0, Excelcolumn3++, RecipeId, recipeName, RecipeCategory,
 							ingredientList, prepTime, cookingTime, prepMethod, nutrientValue, targetCondition, url,
 							path3);
 				}
