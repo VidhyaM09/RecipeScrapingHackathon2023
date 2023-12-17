@@ -14,7 +14,7 @@ import com.recipes.utils.PropertyFileReader;
 
 public class BaseClass {
 
-	String url;
+	static String url;
 	public static WebDriver driver;
 	String title;
 	
@@ -40,13 +40,13 @@ public class BaseClass {
 	}
 
 
-	public WebDriver getUrl(String key) throws Throwable {
+	public static WebDriver getUrl(String key) throws Throwable {
 		url = PropertyFileReader.getGlobalValue(key);
 		driver.get(url);
 		return driver;
 	}
 	
-	public boolean verifyTitle(String title) {
+	public static boolean verifyTitle(String title) {
 		if (driver.getTitle().equals(title)) {
 			System.out.println("Page title: " + title + " matched successfully");
 			return true;
