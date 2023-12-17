@@ -1,4 +1,4 @@
-package com.recipesfordiabetescondition;
+package com.recipesforhypothyroidismcondition;
 
 import org.openqa.selenium.WebElement;
 
@@ -32,8 +32,8 @@ public class GetSetRecipes {
 		return recipeId;
 	}
 
-	public String setRecipeId(String recipeId) {
-		return this.recipeId = recipeId;
+	public void setRecipeId(String recipeId) {
+		this.recipeId = recipeId;
 	}
 
 	public String getRecipeName() {

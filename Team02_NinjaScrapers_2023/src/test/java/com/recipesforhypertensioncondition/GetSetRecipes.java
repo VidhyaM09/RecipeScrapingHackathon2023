@@ -1,4 +1,4 @@
-package com.recipesfordiabetescondition;
+package com.recipesforhypertensioncondition;
 
 import org.openqa.selenium.WebElement;
 
