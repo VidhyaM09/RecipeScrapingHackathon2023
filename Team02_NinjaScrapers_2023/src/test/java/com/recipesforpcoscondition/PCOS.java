@@ -49,37 +49,50 @@ public class PCOS extends BaseClass {
 		seleniumBase.setDriver(browserName);
 		getUrl("baseUrl");
 		verifyTitle("Indian Recipes | Indian Vegetarian Recipes | Top Indian Veg Dishes");
-		System.out.println();
+		System.out.println("*********************");
 
 		WebElement recipies = driver.findElement(By.xpath("//div[contains(text(),'RECIPES')]"));
 
 		recipies.click();
 
-		driver.findElement(By.partialLinkText("PCOS")).click();
+		//driver.findElement(By.partialLinkText("PCOS")).click();
+		//driver.findElement(By.partialLinkText("Healthy Indian Lunch Recipes")).click();
+		driver.findElement(By.partialLinkText("Healthy Heart")).click();
+		
 		page = driver.findElements(By.xpath("//a[@class='respglink']"));
 		int numberOfPages = page.size();
 		for (int i = 1; i <= numberOfPages; i++) {
-			driver.navigate().to("https://www.tarladalal.com/recipes-for-pcos-1040?pageindex=" + i);
+			//driver.navigate().to("https://www.tarladalal.com/recipes-for-pcos-1040?pageindex=" + i);
+
+//			 driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-indian-lunch-837?pageindex="
+//					 + i);
+			 driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-heart-377?pageindex="
+					 + i);
 
 			// To Get Recipe Cards
 			recipeCards = driver.findElements(By.xpath("//article[@class='rcc_recipecard']"));
 			int noOfRecipes = recipeCards.size();
 			System.out.println("Page No: " + i + ", NumberOfrecipes = " + noOfRecipes);
-			System.out.println();
+			System.out.println("*********************");
 
 			for (int j = 0; j < noOfRecipes; j++) {
 
-				driver.navigate().to("https://www.tarladalal.com/recipes-for-pcos-1040?pageindex=" + i);
+				//driver.navigate().to("https://www.tarladalal.com/recipes-for-pcos-1040?pageindex=" + i);
+				
+				 //driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-indian-lunch-837?pageindex="
+						// + i);
+				 driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-heart-377?pageindex="
+						 + i);
 				System.out.println(
 						"Recipes Starting from " + j + " out of " + noOfRecipes + " Recipes from Page No. " + i);
-				System.out.println();
+				System.out.println("*********************");
 
 				// Getting Recipe Name
 				recipeNames = driver.findElements(By.xpath("//span[@class='rcc_recipename']"));
 				gs.setRecipeName(recipeNames.get(j).getText());
 				System.out.println("RecipeName = " + gs.getRecipeName());
 				recipeName = gs.getRecipeName();
-				System.out.println();
+				System.out.println("*********************");
 
 				// Getting Recipe ID
 				try {
@@ -98,7 +111,7 @@ public class PCOS extends BaseClass {
 				String RecipeId = gs.getRecipeId();
 
 				// Getting Recipe Details
-				System.out.println();
+				System.out.println("*********************");
 				recipeDetails = driver.findElements(By.xpath("//span[@class='rcc_recipename']"));
 				goInsideRecipe = gs.setInsideRecipeDetails(recipeDetails.get(j));
 				goInsideRecipe.click();
@@ -118,12 +131,12 @@ public class PCOS extends BaseClass {
 				String RecipeCategory = gs.getRecipeCategory();
 
 				// Getting Ingredient list
-				System.out.println();
+				System.out.println("*********************");
 				ingredientList = driver.findElement(By.id("rcpinglist")).getText();
 				System.out.println("IngredientList = " + ingredientList);
 
 				// Getting Preparation Time
-				System.out.println();
+				System.out.println("*********************");
 				try {
 					preparationTime = driver.findElement(By.xpath("//p/time[@itemprop = 'prepTime']")).getText();
 					System.out.println("PreparationTime = " + preparationTime);
@@ -133,7 +146,7 @@ public class PCOS extends BaseClass {
 				}
 				String prepTime = preparationTime;
 				// Getting cooking time
-				System.out.println();
+				System.out.println("*********************");
 				try {
 
 					cookingTime = driver.findElement(By.xpath("//p/time[@itemprop = 'cookTime']")).getText();
@@ -145,13 +158,13 @@ public class PCOS extends BaseClass {
 				String cookTime = preparationTime;
 
 				// Getting Preparation Method
-				System.out.println();
+				System.out.println("*********************");
 				preparationMethod = driver.findElement(By.id("ctl00_cntrightpanel_pnlRcpMethod")).getText();
 				System.out.println("PreparationMethod = " + preparationMethod);
 				String prepMethod = preparationMethod;
 
 				// Getting Nutrient Value
-				System.out.println();
+				System.out.println("*********************");
 				try {
 					nutritionalValue = driver.findElement(By.id("rcpnutrients")).getText();
 					System.out.println("NutritionalValue = " + nutritionalValue);
@@ -163,7 +176,7 @@ public class PCOS extends BaseClass {
 				String nutrientValue = nutritionalValue;
 
 				// Targetted Morboid Conditions
-				System.out.println();
+				System.out.println("*********************");
 
 				// Use Tesseract OCR to extract text from the image
 				ITesseract tesseract = new Tesseract();
@@ -188,7 +201,7 @@ public class PCOS extends BaseClass {
 				String url = driver.getCurrentUrl();
 
 				String[][] ExcludeCode = PCOSExcelReader.getData("Sheet1");
-				System.out.println(ExcludeCode.toString());
+				
 				int Exsize = ExcludeCode.length;
 				System.out.println("Exsize=" + Exsize);
 				boolean isElimIngredExists = false;

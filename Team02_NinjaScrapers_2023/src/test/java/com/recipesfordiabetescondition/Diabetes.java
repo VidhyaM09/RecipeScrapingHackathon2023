@@ -11,12 +11,13 @@ import org.openqa.selenium.WebElement;
 
 import org.testng.Assert;
 
+import com.recipes.utils.LoggerLoad;
 import com.recipes.utils.PropertyFileReader;
+
 import com.seleniumbase.BaseClass;
 
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
-
 
 public class Diabetes extends BaseClass {
 	static String browserName;
@@ -47,46 +48,41 @@ public class Diabetes extends BaseClass {
 		seleniumBase.setDriver(browserName);
 		getUrl("baseUrl");
 		verifyTitle("Indian Recipes | Indian Vegetarian Recipes | Top Indian Veg Dishes");
-		System.out.println();
+		System.out.println("******************");
 
 		WebElement recipies = driver.findElement(By.xpath("//div[contains(text(),'RECIPES')]"));
 
 		recipies.click();
 
 		driver.findElement(By.partialLinkText("Diabetic recipes")).click();
-		//driver.findElement(By.partialLinkText("Healthy Indian Lunch Recipes")).click();
-		
-		
+
 		page = driver.findElements(By.xpath("//a[@class='respglink']"));
 		int numberOfPages = page.size();
 		for (int i = 1; i <= numberOfPages; i++) {
 			driver.navigate().to("https://www.tarladalal.com/recipes-for-indian-diabetic-recipes-370?pageindex=" + i);
-			
-			//driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-indian-lunch-837?pageindex=" + i);
 
-			
 			// To Get Recipe Cards
 			recipeCards = driver.findElements(By.xpath("//article[@class='rcc_recipecard']"));
 			int noOfRecipes = recipeCards.size();
 			System.out.println("Page No: " + i + ", NumberOfrecipes = " + noOfRecipes);
-			System.out.println();
+			System.out.println("**********************");
 
 			for (int j = 0; j < noOfRecipes; j++) {
 
-				driver.navigate().to("https://www.tarladalal.com/recipes-for-indian-diabetic-recipes-370?pageindex=" + i);
-				
-				//driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-indian-lunch-837?pageindex=" + i);
-				System.out.println(
-						"Recipes Starting from " + j + " out of " + noOfRecipes + " Recipes from Page No. " + i);
-				System.out.println();
+				driver.navigate()
+						.to("https://www.tarladalal.com/recipes-for-indian-diabetic-recipes-370?pageindex=" + i);
+
+				LoggerLoad
+						.info("Recipes Starting from " + j + " out of " + noOfRecipes + " Recipes from Page No. " + i);
+				System.out.println("******************");
 
 				// Getting Recipe Name
 				recipeNames = driver.findElements(By.xpath("//span[@class='rcc_recipename']"));
 				gs.setRecipeName(recipeNames.get(j).getText());
 				System.out.println("RecipeName = " + gs.getRecipeName());
 				recipeName = gs.getRecipeName();
-				// tempRecName = recipeName;
-				System.out.println();
+
+				System.out.println("************************");
 				// Getting Recipe ID
 				try {
 					recipeIds = driver.findElements(By.xpath("//div[@class='rcc_rcpno']/span"));
@@ -104,7 +100,7 @@ public class Diabetes extends BaseClass {
 				String RecipeId = gs.getRecipeId();
 
 				// Getting Recipe Details
-				System.out.println();
+				System.out.println("*************************");
 				recipeDetails = driver.findElements(By.xpath("//span[@class='rcc_recipename']"));
 				goInsideRecipe = gs.setInsideRecipeDetails(recipeDetails.get(j));
 				goInsideRecipe.click();
@@ -124,41 +120,40 @@ public class Diabetes extends BaseClass {
 				String RecipeCategory = gs.getRecipeCategory();
 
 				// Getting Ingredient list
-				System.out.println();
+				System.out.println("*******************");
 				ingredientList = driver.findElement(By.id("rcpinglist")).getText();
 				System.out.println("IngredientList = " + ingredientList);
-			
+
 				// Getting Preparation Time
-				System.out.println();
+				System.out.println("***********************");
 				try {
 					preparationTime = driver.findElement(By.xpath("//p/time[@itemprop = 'prepTime']")).getText();
 					System.out.println("PreparationTime = " + preparationTime);
-					
 
 				} catch (Exception e) {
 					preparationTime = "Preparation time not found";
 				}
 				String prepTime = preparationTime;
 				// Getting cooking time
-				System.out.println();
+				System.out.println("**********************");
 				try {
 
 					cookingTime = driver.findElement(By.xpath("//p/time[@itemprop = 'cookTime']")).getText();
 					System.out.println("CookingTime = " + cookingTime);
-				
+
 				} catch (Exception e) {
 					cookingTime = "cooking time not found";
 				}
 				String cookTime = preparationTime;
 
 				// Getting Preparation Method
-				System.out.println();
+				System.out.println("***********************");
 				preparationMethod = driver.findElement(By.id("ctl00_cntrightpanel_pnlRcpMethod")).getText();
 				System.out.println("PreparationMethod = " + preparationMethod);
 				String prepMethod = preparationMethod;
 
 				// Getting Nutrient Value
-				System.out.println();
+				System.out.println("*************************");
 				try {
 					nutritionalValue = driver.findElement(By.id("rcpnutrients")).getText();
 					System.out.println("NutritionalValue = " + nutritionalValue);
@@ -170,7 +165,7 @@ public class Diabetes extends BaseClass {
 				String nutrientValue = nutritionalValue;
 
 				// Targetted Morboid Conditions
-				System.out.println();
+				System.out.println("**********************");
 
 				// Use Tesseract OCR to extract text from the image
 				ITesseract tesseract = new Tesseract();
@@ -208,9 +203,6 @@ public class Diabetes extends BaseClass {
 					}
 				}
 
-				int Excelcolumn = DiabetesExcelReader.getLastColumn("Sheet1");
-				System.out.println("Starting column=" + Excelcolumn);
-
 				String[][] AddCode = DiabetesExcelReader.getData("Sheet2");
 				int Addsize = AddCode.length;
 				System.out.println("Addsize=" + Addsize);
@@ -224,15 +216,80 @@ public class Diabetes extends BaseClass {
 						isAddIngredientExists = true;
 						break;
 					}
-					
+
 				}
+
+				String[][] allergyCode = DiabetesExcelReader.getData("Sheet3");
+				int allergysize = allergyCode.length;
+				System.out.println("allergysize=" + allergysize);
+				boolean isAllergyIngredientExists = false;
+				for (int k = 0; k < allergysize; k++) {
+					int t = ingredientList.toLowerCase().indexOf(allergyCode[k][0].toLowerCase());
+					if (t != -1) {
+						System.out.println("Allergy Matched" + allergyCode[k][0]);
+						isAllergyIngredientExists = true;
+						break;
+					}
+
+				}
+
+				String[][] nutsallergyCode = DiabetesExcelReader.getData("Sheet4");
+				int nutsallergysize = nutsallergyCode.length;
+				System.out.println("nutsallergysize=" + nutsallergysize);
+				boolean isnutsAllergyIngredientExists = false;
+				for (int k = 0; k < nutsallergysize; k++) {
+
+					int t = ingredientList.toLowerCase().indexOf(nutsallergyCode[k][0].toLowerCase());
+					if (t != -1) {
+						System.out.println("Nuts Allergy Matched" + nutsallergyCode[k][0]);
+						isnutsAllergyIngredientExists = true;
+						break;
+					}
+
+				}
+				System.out.println("elimexists - " + !isElimIngredExists);
+				System.out.println("addexists - " + isAddIngredientExists);
+				System.out.println("allergyexists - " + isAllergyIngredientExists);
+				System.out.println("nutsallergyexists - " + isnutsAllergyIngredientExists);
+
+				String projectDir = System.getProperty("user.dir");
+				String path1 = projectDir + "/src/test/resources/ScrapedRecipesForDiabetes.xlsx";
+				String path2 = projectDir + "/src/test/resources/AllergyRecipes.xlsx";
+				String path3 = projectDir + "/src/test/resources/NutsAllergyRecipes.xlsx";
+
+				int Excelcolumn1 = DiabetesExcelReader.getLastColumn("Sheet1", path1);
+				System.out.println("Starting column=" + Excelcolumn1);
+
+				int Excelcolumn2 = DiabetesExcelReader.getLastColumn("AllergyToAdd", path2);
+				System.out.println("Starting column=" + Excelcolumn2);
+
+				int Excelcolumn3 = DiabetesExcelReader.getLastColumn("NutsAllergyToAdd", path3);
+				System.out.println("Starting column=" + Excelcolumn3);
 
 				if ((!isElimIngredExists) && (isAddIngredientExists)) {
 					System.out.println("Added to excel " + recipeName);
 					DiabetesExcelWriter excelWriter = new DiabetesExcelWriter();
-					excelWriter.WriteData("Sheet1", 0, Excelcolumn++, RecipeId, recipeName, RecipeCategory,
-							ingredientList, prepTime, cookingTime, prepMethod, nutrientValue, targetCondition, url);
+					excelWriter.WriteData("Sheet1", 0, Excelcolumn1++, RecipeId, recipeName, RecipeCategory,
+							ingredientList, prepTime, cookingTime, prepMethod, nutrientValue, targetCondition, url,
+							path1);
 				}
+
+				if ((!isElimIngredExists) && (isAllergyIngredientExists)) {
+					System.out.println("Added to excel " + recipeName);
+					DiabetesExcelWriter excelWriter = new DiabetesExcelWriter();
+					excelWriter.WriteData("AllergyToAdd", 0, Excelcolumn2++, RecipeId, recipeName, RecipeCategory,
+							ingredientList, prepTime, cookingTime, prepMethod, nutrientValue, targetCondition, url,
+							path2);
+				}
+
+				if ((!isElimIngredExists) && (isnutsAllergyIngredientExists)) {
+					System.out.println("Added to excel " + recipeName);
+					DiabetesExcelWriter excelWriter = new DiabetesExcelWriter();
+					excelWriter.WriteData("NutsAllergyToAdd", 0, Excelcolumn3++, RecipeId, recipeName, RecipeCategory,
+							ingredientList, prepTime, cookingTime, prepMethod, nutrientValue, targetCondition, url,
+							path3);
+				}
+
 				driver.navigate().back();
 			}
 		}
@@ -241,7 +298,7 @@ public class Diabetes extends BaseClass {
 
 	public static void main(String[] args) throws Throwable {
 
-		Diabetes recipe = new Diabetes ();
+		Diabetes recipe = new Diabetes();
 
 		recipe.recipeScrapingForDiabetes();
 
