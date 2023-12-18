@@ -1,20 +1,10 @@
 package com.recipesfordiabetescondition;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Iterator;
+
 import java.util.List;
-
-import org.apache.poi.ss.usermodel.Cell;
-
-import org.apache.poi.ss.usermodel.Row;
-
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 
 import org.openqa.selenium.WebElement;
@@ -22,15 +12,11 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
 import com.recipes.utils.PropertyFileReader;
-import com.recipesforhypothyroidismcondition.Hypothyroidism;
-import com.recipesforhypothyroidismcondition.HypothyroidismExcelReader;
-import com.recipesforhypothyroidismcondition.HypothyroidismExcelWriter;
 import com.seleniumbase.BaseClass;
 
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 
-import org.apache.commons.lang3.StringUtils;
 
 public class Diabetes extends BaseClass {
 	static String browserName;
@@ -68,12 +54,17 @@ public class Diabetes extends BaseClass {
 		recipies.click();
 
 		driver.findElement(By.partialLinkText("Diabetic recipes")).click();
+		//driver.findElement(By.partialLinkText("Healthy Indian Lunch Recipes")).click();
+		
 		
 		page = driver.findElements(By.xpath("//a[@class='respglink']"));
-		int numberOfPages = 24;
+		int numberOfPages = page.size();
 		for (int i = 1; i <= numberOfPages; i++) {
 			driver.navigate().to("https://www.tarladalal.com/recipes-for-indian-diabetic-recipes-370?pageindex=" + i);
+			
+			//driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-indian-lunch-837?pageindex=" + i);
 
+			
 			// To Get Recipe Cards
 			recipeCards = driver.findElements(By.xpath("//article[@class='rcc_recipecard']"));
 			int noOfRecipes = recipeCards.size();
@@ -83,6 +74,8 @@ public class Diabetes extends BaseClass {
 			for (int j = 0; j < noOfRecipes; j++) {
 
 				driver.navigate().to("https://www.tarladalal.com/recipes-for-indian-diabetic-recipes-370?pageindex=" + i);
+				
+				//driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-indian-lunch-837?pageindex=" + i);
 				System.out.println(
 						"Recipes Starting from " + j + " out of " + noOfRecipes + " Recipes from Page No. " + i);
 				System.out.println();
@@ -134,14 +127,13 @@ public class Diabetes extends BaseClass {
 				System.out.println();
 				ingredientList = driver.findElement(By.id("rcpinglist")).getText();
 				System.out.println("IngredientList = " + ingredientList);
-				// tempIngred = ingredientList;
-
+			
 				// Getting Preparation Time
 				System.out.println();
 				try {
 					preparationTime = driver.findElement(By.xpath("//p/time[@itemprop = 'prepTime']")).getText();
 					System.out.println("PreparationTime = " + preparationTime);
-					// tempPrepTime = preparationTime;
+					
 
 				} catch (Exception e) {
 					preparationTime = "Preparation time not found";
@@ -153,7 +145,7 @@ public class Diabetes extends BaseClass {
 
 					cookingTime = driver.findElement(By.xpath("//p/time[@itemprop = 'cookTime']")).getText();
 					System.out.println("CookingTime = " + cookingTime);
-					// tempCookTime = cookingTime;
+				
 				} catch (Exception e) {
 					cookingTime = "cooking time not found";
 				}
@@ -179,8 +171,6 @@ public class Diabetes extends BaseClass {
 
 				// Targetted Morboid Conditions
 				System.out.println();
-//				targetMorboidCondition = driver
-//						.findElements(By.xpath("//div[@class='rcc_caticons']/img[@src='images/recipe/diabetic.gif']"));
 
 				// Use Tesseract OCR to extract text from the image
 				ITesseract tesseract = new Tesseract();
@@ -230,7 +220,7 @@ public class Diabetes extends BaseClass {
 
 					int t = ingredientList.toLowerCase().indexOf(AddCode[k][0].toLowerCase());
 					if (t != -1) {
-						System.out.println("Add Matched" + AddCode[k][0]);
+						System.out.println("Add Matched " + AddCode[k][0]);
 						isAddIngredientExists = true;
 						break;
 					}

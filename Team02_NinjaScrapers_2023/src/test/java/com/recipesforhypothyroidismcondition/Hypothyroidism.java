@@ -1,21 +1,11 @@
 package com.recipesforhypothyroidismcondition;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Iterator;
+
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.Cell;
-
-import org.apache.poi.ss.usermodel.Row;
-
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 
 import org.openqa.selenium.WebElement;
@@ -23,9 +13,9 @@ import org.testng.Assert;
 
 import com.recipes.utils.PropertyFileReader;
 import com.recipesfordiabetescondition.GetSetRecipes;
-import com.recipesforhypertensioncondition.Hypertension;
-import com.recipesforhypertensioncondition.HypertensionExcelReader;
-import com.recipesforhypertensioncondition.HypertensionExcelWriter;
+
+import com.recipesforpcoscondition.PCOSExcelReader;
+import com.recipesforpcoscondition.PCOSExcelWriter;
 import com.seleniumbase.BaseClass;
 
 import net.sourceforge.tess4j.ITesseract;
@@ -68,10 +58,18 @@ public class Hypothyroidism extends BaseClass {
 		recipies.click();
 
 		driver.findElement(By.partialLinkText("Hypothyroidism Diet")).click();
+
+		// driver.findElement(By.partialLinkText("Healthy Heart")).click();
+
 		page = driver.findElements(By.xpath("//a[@class='respglink']"));
-		int numberOfPages = 3;
+		System.out.println("Page size: " + page.size());
+		int numberOfPages = page.size();
 		for (int i = 1; i <= numberOfPages; i++) {
-			driver.navigate().to("https://www.tarladalal.com/recipes-for-hypothyroidism-veg-diet-indian-recipes-849?pageindex=" + i);
+			driver.navigate().to(
+					"https://www.tarladalal.com/recipes-for-hypothyroidism-veg-diet-indian-recipes-849?pageindex=" + i);
+
+			// driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-heart-377?pageindex="
+			// + i);
 
 			// To Get Recipe Cards
 			recipeCards = driver.findElements(By.xpath("//article[@class='rcc_recipecard']"));
@@ -81,7 +79,12 @@ public class Hypothyroidism extends BaseClass {
 
 			for (int j = 0; j < noOfRecipes; j++) {
 
-				driver.navigate().to("https://www.tarladalal.com/recipes-for-hypothyroidism-veg-diet-indian-recipes-849?pageindex=" + i);
+				driver.navigate().to(
+						"https://www.tarladalal.com/recipes-for-hypothyroidism-veg-diet-indian-recipes-849?pageindex="
+								+ i);
+				// driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-heart-377?pageindex="
+				// + i);
+
 				System.out.println(
 						"Recipes Starting from " + j + " out of " + noOfRecipes + " Recipes from Page No. " + i);
 				System.out.println();
@@ -133,14 +136,12 @@ public class Hypothyroidism extends BaseClass {
 				System.out.println();
 				ingredientList = driver.findElement(By.id("rcpinglist")).getText();
 				System.out.println("IngredientList = " + ingredientList);
-				// tempIngred = ingredientList;
 
 				// Getting Preparation Time
 				System.out.println();
 				try {
 					preparationTime = driver.findElement(By.xpath("//p/time[@itemprop = 'prepTime']")).getText();
 					System.out.println("PreparationTime = " + preparationTime);
-					// tempPrepTime = preparationTime;
 
 				} catch (Exception e) {
 					preparationTime = "Preparation time not found";
@@ -152,7 +153,7 @@ public class Hypothyroidism extends BaseClass {
 
 					cookingTime = driver.findElement(By.xpath("//p/time[@itemprop = 'cookTime']")).getText();
 					System.out.println("CookingTime = " + cookingTime);
-					// tempCookTime = cookingTime;
+
 				} catch (Exception e) {
 					cookingTime = "cooking time not found";
 				}
@@ -206,7 +207,6 @@ public class Hypothyroidism extends BaseClass {
 				System.out.println("Exsize=" + Exsize);
 				boolean isElimIngredExists = false;
 				for (int k = 0; k < Exsize; k++) {
-					// System.out.println("Exsize to string=" + ExcludeCode[k][0] );
 
 					int t = ingredientList.toLowerCase().indexOf(ExcludeCode[k][0].toLowerCase());
 					if (t != -1) {
@@ -214,9 +214,7 @@ public class Hypothyroidism extends BaseClass {
 						isElimIngredExists = true;
 						break;
 					}
-					// else {
-					// System.out.println("Not match");
-					// }
+
 				}
 
 				int Excelcolumn = HypothyroidismExcelReader.getLastColumn("Sheet1");
@@ -227,7 +225,6 @@ public class Hypothyroidism extends BaseClass {
 				System.out.println("Addsize=" + Addsize);
 				boolean isAddIngredientExists = false;
 				for (int k = 0; k < Addsize; k++) {
-					// System.out.println("Exsize to string=" + AddCode[k][0] );
 
 					int t = ingredientList.toLowerCase().indexOf(AddCode[k][0].toLowerCase());
 					if (t != -1) {
@@ -235,10 +232,55 @@ public class Hypothyroidism extends BaseClass {
 						isAddIngredientExists = true;
 						break;
 					}
-					// else {
-					// System.out.println("Not match");
-					// }
+
 				}
+
+				String[][] allergyCode = PCOSExcelReader.getData("Sheet3");
+				int allergysize = allergyCode.length;
+				System.out.println("allergysize=" + allergysize);
+				boolean isAllergyIngredientExists = false;
+				for (int k = 0; k < allergysize; k++) {
+					int t = ingredientList.toLowerCase().indexOf(allergyCode[k][0].toLowerCase());
+					if (t != -1) {
+						System.out.println("Allergy Matched" + allergyCode[k][0]);
+						isAllergyIngredientExists = true;
+						break;
+					}
+
+				}
+
+				String[][] nutsallergyCode = PCOSExcelReader.getData("Sheet4");
+				int nutsallergysize = nutsallergyCode.length;
+				System.out.println("nutsallergysize=" + nutsallergysize);
+				boolean isnutsAllergyIngredientExists = false;
+				for (int k = 0; k < nutsallergysize; k++) {
+
+					int t = ingredientList.toLowerCase().indexOf(nutsallergyCode[k][0].toLowerCase());
+					if (t != -1) {
+						System.out.println("Nuts Allergy Matched" + nutsallergyCode[k][0]);
+						isnutsAllergyIngredientExists = true;
+						break;
+					}
+
+				}
+				System.out.println("elimexists - " + !isElimIngredExists);
+				System.out.println("addexists - " + isAddIngredientExists);
+				System.out.println("allergyexists - " + isAllergyIngredientExists);
+				System.out.println("nutsallergyexists - " + isnutsAllergyIngredientExists);
+
+				String projectDir = System.getProperty("user.dir");
+				String path1 = projectDir + "/src/test/resources/ScrapedRecipesForPCOS.xlsx";
+				String path2 = projectDir + "/src/test/resources/AllergyRecipes.xlsx";
+				String path3 = projectDir + "/src/test/resources/NutsAllergyRecipes.xlsx";
+
+				int Excelcolumn1 = PCOSExcelReader.getLastColumn("Sheet1", path1);
+				System.out.println("Starting column=" + Excelcolumn1);
+
+				int Excelcolumn2 = PCOSExcelReader.getLastColumn("AllergyToAdd", path2);
+				System.out.println("Starting column=" + Excelcolumn2);
+
+				int Excelcolumn3 = PCOSExcelReader.getLastColumn("NutsAllergyToAdd", path3);
+				System.out.println("Starting column=" + Excelcolumn3);
 
 				if ((!isElimIngredExists) && (isAddIngredientExists)) {
 					System.out.println("Added to excel " + recipeName);
@@ -246,6 +288,23 @@ public class Hypothyroidism extends BaseClass {
 					excelWriter.WriteData("Sheet1", 0, Excelcolumn++, RecipeId, recipeName, RecipeCategory,
 							ingredientList, prepTime, cookingTime, prepMethod, nutrientValue, targetCondition, url);
 				}
+
+				if ((!isElimIngredExists) && (isAllergyIngredientExists)) {
+					System.out.println("Added to excel " + recipeName);
+					PCOSExcelWriter excelWriter = new PCOSExcelWriter();
+					excelWriter.WriteData("AllergyToAdd", 0, Excelcolumn2++, RecipeId, recipeName, RecipeCategory,
+							ingredientList, prepTime, cookingTime, prepMethod, nutrientValue, targetCondition, url,
+							path2);
+				}
+
+				if ((!isElimIngredExists) && (isnutsAllergyIngredientExists)) {
+					System.out.println("Added to excel " + recipeName);
+					PCOSExcelWriter excelWriter = new PCOSExcelWriter();
+					excelWriter.WriteData("NutsAllergyToAdd", 0, Excelcolumn3++, RecipeId, recipeName, RecipeCategory,
+							ingredientList, prepTime, cookingTime, prepMethod, nutrientValue, targetCondition, url,
+							path3);
+				}
+
 				driver.navigate().back();
 			}
 		}
