@@ -4,10 +4,7 @@ import java.io.File;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 
 import com.recipes.utils.PropertyFileReader;
@@ -58,7 +55,7 @@ public class Hypertension extends BaseClass {
 
 		driver.findElement(By.partialLinkText("High Fiber")).click();
 		page = driver.findElements(By.xpath("//a[@class='respglink']"));
-		int numberOfPages = 16;
+		int numberOfPages = page.size();
 		for (int i = 1; i <= numberOfPages; i++) {
 			driver.navigate().to("https://www.tarladalal.com/recipes-for-high-fiber-819?pageindex=" + i);
 
@@ -80,7 +77,7 @@ public class Hypertension extends BaseClass {
 				gs.setRecipeName(recipeNames.get(j).getText());
 				System.out.println("RecipeName = " + gs.getRecipeName());
 				recipeName = gs.getRecipeName();
-				// tempRecName = recipeName;
+
 				System.out.println();
 				// Getting Recipe ID
 				try {
@@ -122,14 +119,12 @@ public class Hypertension extends BaseClass {
 				System.out.println();
 				ingredientList = driver.findElement(By.id("rcpinglist")).getText();
 				System.out.println("IngredientList = " + ingredientList);
-				// tempIngred = ingredientList;
 
 				// Getting Preparation Time
 				System.out.println();
 				try {
 					preparationTime = driver.findElement(By.xpath("//p/time[@itemprop = 'prepTime']")).getText();
 					System.out.println("PreparationTime = " + preparationTime);
-					// tempPrepTime = preparationTime;
 
 				} catch (Exception e) {
 					preparationTime = "Preparation time not found";
@@ -141,7 +136,7 @@ public class Hypertension extends BaseClass {
 
 					cookingTime = driver.findElement(By.xpath("//p/time[@itemprop = 'cookTime']")).getText();
 					System.out.println("CookingTime = " + cookingTime);
-					// tempCookTime = cookingTime;
+
 				} catch (Exception e) {
 					cookingTime = "cooking time not found";
 				}
@@ -195,7 +190,6 @@ public class Hypertension extends BaseClass {
 				System.out.println("Exsize=" + Exsize);
 				boolean isElimIngredExists = false;
 				for (int k = 0; k < Exsize; k++) {
-					// System.out.println("Exsize to string=" + ExcludeCode[k][0] );
 
 					int t = ingredientList.toLowerCase().indexOf(ExcludeCode[k][0].toLowerCase());
 					if (t != -1) {
@@ -203,9 +197,7 @@ public class Hypertension extends BaseClass {
 						isElimIngredExists = true;
 						break;
 					}
-					// else {
-					// System.out.println("Not match");
-					// }
+
 				}
 
 				int Excelcolumn = HypertensionExcelReader.getLastColumn("Sheet1");
@@ -216,17 +208,14 @@ public class Hypertension extends BaseClass {
 				System.out.println("Addsize=" + Addsize);
 				boolean isAddIngredientExists = false;
 				for (int k = 0; k < Addsize; k++) {
-					// System.out.println("Exsize to string=" + AddCode[k][0] );
 
 					int t = ingredientList.toLowerCase().indexOf(AddCode[k][0].toLowerCase());
 					if (t != -1) {
-						System.out.println("Add Matched" + AddCode[k][0]);
+						System.out.println("Add Matched " + AddCode[k][0]);
 						isAddIngredientExists = true;
 						break;
 					}
-					// else {
-					// System.out.println("Not match");
-					// }
+
 				}
 
 				if ((!isElimIngredExists) && (isAddIngredientExists)) {

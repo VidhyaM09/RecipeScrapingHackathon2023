@@ -1,21 +1,11 @@
 package com.recipesforpcoscondition;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Iterator;
+
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.Cell;
-
-import org.apache.poi.ss.usermodel.Row;
-
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 
 import org.openqa.selenium.WebElement;
@@ -23,9 +13,7 @@ import org.testng.Assert;
 
 import com.recipes.utils.PropertyFileReader;
 import com.recipesfordiabetescondition.GetSetRecipes;
-import com.recipesforhypertensioncondition.Hypertension;
-import com.recipesforhypertensioncondition.HypertensionExcelReader;
-import com.recipesforhypertensioncondition.HypertensionExcelWriter;
+
 import com.seleniumbase.BaseClass;
 
 import net.sourceforge.tess4j.ITesseract;
@@ -69,7 +57,7 @@ public class PCOS extends BaseClass {
 
 		driver.findElement(By.partialLinkText("PCOS")).click();
 		page = driver.findElements(By.xpath("//a[@class='respglink']"));
-		int numberOfPages = 6;
+		int numberOfPages = page.size();
 		for (int i = 1; i <= numberOfPages; i++) {
 			driver.navigate().to("https://www.tarladalal.com/recipes-for-pcos-1040?pageindex=" + i);
 
@@ -91,8 +79,8 @@ public class PCOS extends BaseClass {
 				gs.setRecipeName(recipeNames.get(j).getText());
 				System.out.println("RecipeName = " + gs.getRecipeName());
 				recipeName = gs.getRecipeName();
-				// tempRecName = recipeName;
 				System.out.println();
+
 				// Getting Recipe ID
 				try {
 					recipeIds = driver.findElements(By.xpath("//div[@class='rcc_rcpno']/span"));
@@ -133,14 +121,12 @@ public class PCOS extends BaseClass {
 				System.out.println();
 				ingredientList = driver.findElement(By.id("rcpinglist")).getText();
 				System.out.println("IngredientList = " + ingredientList);
-				// tempIngred = ingredientList;
 
 				// Getting Preparation Time
 				System.out.println();
 				try {
 					preparationTime = driver.findElement(By.xpath("//p/time[@itemprop = 'prepTime']")).getText();
 					System.out.println("PreparationTime = " + preparationTime);
-					// tempPrepTime = preparationTime;
 
 				} catch (Exception e) {
 					preparationTime = "Preparation time not found";
@@ -152,7 +138,7 @@ public class PCOS extends BaseClass {
 
 					cookingTime = driver.findElement(By.xpath("//p/time[@itemprop = 'cookTime']")).getText();
 					System.out.println("CookingTime = " + cookingTime);
-					// tempCookTime = cookingTime;
+
 				} catch (Exception e) {
 					cookingTime = "cooking time not found";
 				}
@@ -193,7 +179,7 @@ public class PCOS extends BaseClass {
 				try {
 					recipeUrl = driver.getCurrentUrl();
 					System.out.println("Recipe URL = " + recipeUrl);
-					// tempUrl = driver.getCurrentUrl();
+
 					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 				} catch (Exception e) {
 					System.out.println("No recipe url is found");
@@ -207,18 +193,13 @@ public class PCOS extends BaseClass {
 				System.out.println("Exsize=" + Exsize);
 				boolean isElimIngredExists = false;
 				for (int k = 0; k < Exsize; k++) {
-					// System.out.println("Exsize to string=" + ExcludeCode[k][0] );
 					int t = ingredientList.toLowerCase().indexOf(ExcludeCode[k][0].toLowerCase());
 					if (t != -1) {
-						// System.out.println("k - " + Integer.toString(k));
-						// System.out.println("Excluecode - " + ExcludeCode[k][0]);
 						System.out.println("Elim Matched " + ExcludeCode[k][0]);
 						isElimIngredExists = true;
 						break;
 					}
-					// else {
-					// System.out.println("Not match");
-					// }
+
 				}
 
 				String[][] AddCode = PCOSExcelReader.getData("Sheet2");
@@ -226,17 +207,12 @@ public class PCOS extends BaseClass {
 				System.out.println("Addsize=" + Addsize);
 				boolean isAddIngredientExists = false;
 				for (int k = 0; k < Addsize; k++) {
-					// System.out.println("Exsize to string=" + AddCode[k][0] );
-
 					int t = ingredientList.toLowerCase().indexOf(AddCode[k][0].toLowerCase());
 					if (t != -1) {
 						System.out.println("Add Matched" + AddCode[k][0]);
 						isAddIngredientExists = true;
 						break;
 					}
-					// else {
-					// System.out.println("Not match");
-					// }
 				}
 
 				String[][] allergyCode = PCOSExcelReader.getData("Sheet3");
@@ -244,7 +220,6 @@ public class PCOS extends BaseClass {
 				System.out.println("allergysize=" + allergysize);
 				boolean isAllergyIngredientExists = false;
 				for (int k = 0; k < allergysize; k++) {
-					// System.out.println("Exsize to string=" + AddCode[k][0] );
 
 					int t = ingredientList.toLowerCase().indexOf(allergyCode[k][0].toLowerCase());
 					if (t != -1) {
