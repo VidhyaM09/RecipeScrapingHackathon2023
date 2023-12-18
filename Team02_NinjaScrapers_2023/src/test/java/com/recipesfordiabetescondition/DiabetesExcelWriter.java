@@ -9,10 +9,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 
-import java.io.File;
-import java.io.FileInputStream;
+
 import java.io.FileOutputStream;
-import java.io.IOException;
+
 
 public class DiabetesExcelWriter {
 	public XSSFRow row;
@@ -20,13 +19,10 @@ public class DiabetesExcelWriter {
 
 	public void WriteData(String sheetname, int rownum, int column, String RecipeId, String recipeName,
 			String RecipeCategory, String ingredientList, String prepTime, String cookingTime, String prepMethod,
-			String nutrientValue, String targetCondition, String url) throws IOException {
+			String nutrientValue, String targetCondition, String url,String filePath) throws IOException {
 
-		String projectDir = System.getProperty("user.dir");
-		String path = projectDir + "/src/test/resources/ScrapedRecipesForDiabetes.xlsx";
-		File file = new File(path);
 
-		FileInputStream inputStream = new FileInputStream(file);
+		FileInputStream inputStream = new FileInputStream(new File(filePath));
 		XSSFWorkbook wb = new XSSFWorkbook(inputStream);
 
 		XSSFSheet sheet = wb.getSheet(sheetname);
@@ -71,7 +67,7 @@ public class DiabetesExcelWriter {
 		cell = row.createCell(column);
 		cell.setCellValue(url);
 
-		FileOutputStream outputStream = new FileOutputStream(path);
+		FileOutputStream outputStream = new FileOutputStream(filePath);
 		wb.write(outputStream);
 		wb.close();
 		inputStream.close();
