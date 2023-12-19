@@ -1,4 +1,4 @@
-package com.recipesfordiabetescondition;
+package com.recipes.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,13 +10,12 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class DiabetesExcelReader {
+public class ExcelReader {
 
-	public static String[][] getData(String sheetname) throws IOException {
-		String projectDir = System.getProperty("user.dir");
-		String path = projectDir + "/src/test/resources/IngredientsForDiabetes.xlsx";
-		File ExcelFile = new File(path);
-		FileInputStream FIS = new FileInputStream(ExcelFile);
+	public static String[][] getData(String sheetname,String path) throws IOException {
+		
+
+		FileInputStream FIS = new FileInputStream(new File(path));
 		XSSFWorkbook workbook = new XSSFWorkbook(FIS);
 		XSSFSheet sheet = workbook.getSheet(sheetname);
 		int row = sheet.getLastRowNum();
