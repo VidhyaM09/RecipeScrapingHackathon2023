@@ -16,7 +16,6 @@ import com.recipes.utils.ExcelWriter;
 import com.recipes.utils.GetSetRecipes;
 import com.recipes.utils.PropertyFileReader;
 
-
 import com.seleniumbase.BaseClass;
 
 import net.sourceforge.tess4j.ITesseract;
@@ -58,20 +57,20 @@ public class PCOS extends BaseClass {
 
 		recipies.click();
 
-		// driver.findElement(By.partialLinkText("PCOS")).click();
+		driver.findElement(By.partialLinkText("PCOS")).click();
 		// driver.findElement(By.partialLinkText("Healthy Indian Lunch
 		// Recipes")).click();
-		driver.findElement(By.partialLinkText("Healthy Heart")).click();
+		// driver.findElement(By.partialLinkText("Healthy Heart")).click();
 
 		page = driver.findElements(By.xpath("//a[@class='respglink']"));
 		int numberOfPages = page.size();
 		for (int i = 1; i <= numberOfPages; i++) {
-			// driver.navigate().to("https://www.tarladalal.com/recipes-for-pcos-1040?pageindex="
-			// + i);
+			driver.navigate().to("https://www.tarladalal.com/recipes-for-pcos-1040?pageindex=" + i);
 
-//			 driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-indian-lunch-837?pageindex="
+			// driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-indian-lunch-837?pageindex="
 //					 + i);
-			driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-heart-377?pageindex=" + i);
+			// driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-heart-377?pageindex="
+			// + i);
 
 			// To Get Recipe Cards
 			recipeCards = driver.findElements(By.xpath("//article[@class='rcc_recipecard']"));
@@ -81,12 +80,12 @@ public class PCOS extends BaseClass {
 
 			for (int j = 0; j < noOfRecipes; j++) {
 
-				// driver.navigate().to("https://www.tarladalal.com/recipes-for-pcos-1040?pageindex="
-				// + i);
+				driver.navigate().to("https://www.tarladalal.com/recipes-for-pcos-1040?pageindex=" + i);
 
 				// driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-indian-lunch-837?pageindex="
 				// + i);
-				driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-heart-377?pageindex=" + i);
+				// driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-heart-377?pageindex="
+				// + i);
 				System.out.println(
 						"Recipes Starting from " + j + " out of " + noOfRecipes + " Recipes from Page No. " + i);
 				System.out.println("*********************");
@@ -184,9 +183,9 @@ public class PCOS extends BaseClass {
 
 				// Use Tesseract OCR to extract text from the image
 				ITesseract tesseract = new Tesseract();
+				String imgPath = PropertyFileReader.getGlobalValue("pcosImgPath");
 
-				String text = tesseract
-						.doOCR(new File(System.getProperty("user.dir") + "/src/test/resources/images/PCOS.PNG"));
+				String text = tesseract.doOCR(new File(System.getProperty("user.dir") + imgPath));
 
 				// Output the extracted text
 				System.out.println("Targetted Morboid Conditions = " + text);
@@ -205,7 +204,8 @@ public class PCOS extends BaseClass {
 				String url = driver.getCurrentUrl();
 
 				String userDir = System.getProperty("user.dir");
-				String getDataPath = userDir + "/src/test/resources/IngredientsForHypothyroidism.xlsx";
+				String readPath = PropertyFileReader.getGlobalValue("pcosReadpath1");
+				String getDataPath = userDir + readPath;
 
 				String[][] ExcludeCode = ExcelReader.getData("Sheet1", getDataPath);
 
@@ -270,10 +270,14 @@ public class PCOS extends BaseClass {
 				System.out.println("allergyexists - " + isAllergyIngredientExists);
 				System.out.println("nutsallergyexists - " + isnutsAllergyIngredientExists);
 
+				String scrapedPath = PropertyFileReader.getGlobalValue("pcosScrapedPath");
+				String allergyRecipesPath = PropertyFileReader.getGlobalValue("allergyRecipes");
+				String nutsAllergyPath = PropertyFileReader.getGlobalValue("nutsAllergy");
+
 				String projectDir = System.getProperty("user.dir");
-				String path1 = projectDir + "/src/test/resources/ScrapedRecipesForPCOS.xlsx";
-				String path2 = projectDir + "/src/test/resources/AllergyRecipes.xlsx";
-				String path3 = projectDir + "/src/test/resources/NutsAllergyRecipes.xlsx";
+				String path1 = projectDir + scrapedPath;
+				String path2 = projectDir + allergyRecipesPath;
+				String path3 = projectDir + nutsAllergyPath;
 
 				int Excelcolumn1 = ExcelReader.getLastColumn("Sheet1", path1);
 				System.out.println("Starting column=" + Excelcolumn1);
