@@ -172,9 +172,11 @@ public class Diabetes extends BaseClass {
 
 				// Use Tesseract OCR to extract text from the image
 				ITesseract tesseract = new Tesseract();
+				
+				String imgPath=PropertyFileReader.getGlobalValue("diabeticImgPath");
 
 				String text = tesseract.doOCR(
-						new File(System.getProperty("user.dir") + "/src/test/resources/images/diabeticRecipe.png"));
+						new File(System.getProperty("user.dir") +imgPath));
 
 				// Output the extracted text
 				System.out.println("Targetted Morboid Conditions = " + text);
@@ -191,9 +193,9 @@ public class Diabetes extends BaseClass {
 				}
 
 				String url = driver.getCurrentUrl();
-
+                String getPathread=PropertyFileReader.getGlobalValue("diabeticReadpath1");
 				String userDir = System.getProperty("user.dir");
-				String getDataPath = userDir + "/src/test/resources/IngredientsForDiabetes.xlsx";
+				String getDataPath = userDir + getPathread;
 
 				String[][] ExcludeCode = ExcelReader.getData("Sheet1", getDataPath);
 				int Exsize = ExcludeCode.length;
@@ -257,11 +259,15 @@ public class Diabetes extends BaseClass {
 				System.out.println("addexists - " + isAddIngredientExists);
 				System.out.println("allergyexists - " + isAllergyIngredientExists);
 				System.out.println("nutsallergyexists - " + isnutsAllergyIngredientExists);
+				
+				String scrapedPath=PropertyFileReader.getGlobalValue("diabetesScrapedpath");
+				String allergyRecipesPath=PropertyFileReader.getGlobalValue("allergyRecipes");
+				String nutsAllergyPath=PropertyFileReader.getGlobalValue("nutsAllergy");
 
 				String projectDir = System.getProperty("user.dir");
-				String path1 = projectDir + "/src/test/resources/ScrapedRecipesForDiabetes.xlsx";
-				String path2 = projectDir + "/src/test/resources/AllergyRecipes.xlsx";
-				String path3 = projectDir + "/src/test/resources/NutsAllergyRecipes.xlsx";
+				String path1 = projectDir +scrapedPath;
+				String path2 = projectDir + allergyRecipesPath ;
+				String path3 = projectDir + nutsAllergyPath ;
 
 				int Excelcolumn1 = ExcelReader.getLastColumn("Sheet1", path1);
 				System.out.println("Starting column=" + Excelcolumn1);

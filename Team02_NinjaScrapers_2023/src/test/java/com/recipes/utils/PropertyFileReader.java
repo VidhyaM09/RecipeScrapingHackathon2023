@@ -23,14 +23,6 @@ public class PropertyFileReader {
 		}
 		return prop.getProperty(key);
 	}
-	
-	public static String getexcelfilepath() {
-		String excelfilelpath = prop.getProperty("excelfilepath");
-		if (excelfilelpath != null)
-			return excelfilelpath;
-		else
-			throw new RuntimeException("Excel file path not specified in the Configuration.properties file.");
-	}
 
 
 }
