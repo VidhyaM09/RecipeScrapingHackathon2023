@@ -11,8 +11,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
+import com.recipes.utils.ExcelReader;
+import com.recipes.utils.ExcelWriter;
+import com.recipes.utils.GetSetRecipes;
 import com.recipes.utils.PropertyFileReader;
-import com.recipesfordiabetescondition.GetSetRecipes;
+
 
 import com.seleniumbase.BaseClass;
 
@@ -55,19 +58,20 @@ public class PCOS extends BaseClass {
 
 		recipies.click();
 
-		//driver.findElement(By.partialLinkText("PCOS")).click();
-		//driver.findElement(By.partialLinkText("Healthy Indian Lunch Recipes")).click();
+		// driver.findElement(By.partialLinkText("PCOS")).click();
+		// driver.findElement(By.partialLinkText("Healthy Indian Lunch
+		// Recipes")).click();
 		driver.findElement(By.partialLinkText("Healthy Heart")).click();
-		
+
 		page = driver.findElements(By.xpath("//a[@class='respglink']"));
 		int numberOfPages = page.size();
 		for (int i = 1; i <= numberOfPages; i++) {
-			//driver.navigate().to("https://www.tarladalal.com/recipes-for-pcos-1040?pageindex=" + i);
+			// driver.navigate().to("https://www.tarladalal.com/recipes-for-pcos-1040?pageindex="
+			// + i);
 
 //			 driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-indian-lunch-837?pageindex="
 //					 + i);
-			 driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-heart-377?pageindex="
-					 + i);
+			driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-heart-377?pageindex=" + i);
 
 			// To Get Recipe Cards
 			recipeCards = driver.findElements(By.xpath("//article[@class='rcc_recipecard']"));
@@ -77,12 +81,12 @@ public class PCOS extends BaseClass {
 
 			for (int j = 0; j < noOfRecipes; j++) {
 
-				//driver.navigate().to("https://www.tarladalal.com/recipes-for-pcos-1040?pageindex=" + i);
-				
-				 //driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-indian-lunch-837?pageindex="
-						// + i);
-				 driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-heart-377?pageindex="
-						 + i);
+				// driver.navigate().to("https://www.tarladalal.com/recipes-for-pcos-1040?pageindex="
+				// + i);
+
+				// driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-indian-lunch-837?pageindex="
+				// + i);
+				driver.navigate().to("https://www.tarladalal.com/recipes-for-healthy-heart-377?pageindex=" + i);
 				System.out.println(
 						"Recipes Starting from " + j + " out of " + noOfRecipes + " Recipes from Page No. " + i);
 				System.out.println("*********************");
@@ -200,8 +204,11 @@ public class PCOS extends BaseClass {
 
 				String url = driver.getCurrentUrl();
 
-				String[][] ExcludeCode = PCOSExcelReader.getData("Sheet1");
-				
+				String userDir = System.getProperty("user.dir");
+				String getDataPath = userDir + "/src/test/resources/IngredientsForHypothyroidism.xlsx";
+
+				String[][] ExcludeCode = ExcelReader.getData("Sheet1", getDataPath);
+
 				int Exsize = ExcludeCode.length;
 				System.out.println("Exsize=" + Exsize);
 				boolean isElimIngredExists = false;
@@ -215,7 +222,7 @@ public class PCOS extends BaseClass {
 
 				}
 
-				String[][] AddCode = PCOSExcelReader.getData("Sheet2");
+				String[][] AddCode = ExcelReader.getData("Sheet2", getDataPath);
 				int Addsize = AddCode.length;
 				System.out.println("Addsize=" + Addsize);
 				boolean isAddIngredientExists = false;
@@ -228,7 +235,7 @@ public class PCOS extends BaseClass {
 					}
 				}
 
-				String[][] allergyCode = PCOSExcelReader.getData("Sheet3");
+				String[][] allergyCode = ExcelReader.getData("Sheet3", getDataPath);
 				int allergysize = allergyCode.length;
 				System.out.println("allergysize=" + allergysize);
 				boolean isAllergyIngredientExists = false;
@@ -243,7 +250,7 @@ public class PCOS extends BaseClass {
 
 				}
 
-				String[][] nutsallergyCode = PCOSExcelReader.getData("Sheet4");
+				String[][] nutsallergyCode = ExcelReader.getData("Sheet4", getDataPath);
 				int nutsallergysize = nutsallergyCode.length;
 				System.out.println("nutsallergysize=" + nutsallergysize);
 				boolean isnutsAllergyIngredientExists = false;
@@ -268,18 +275,18 @@ public class PCOS extends BaseClass {
 				String path2 = projectDir + "/src/test/resources/AllergyRecipes.xlsx";
 				String path3 = projectDir + "/src/test/resources/NutsAllergyRecipes.xlsx";
 
-				int Excelcolumn1 = PCOSExcelReader.getLastColumn("Sheet1", path1);
+				int Excelcolumn1 = ExcelReader.getLastColumn("Sheet1", path1);
 				System.out.println("Starting column=" + Excelcolumn1);
 
-				int Excelcolumn2 = PCOSExcelReader.getLastColumn("AllergyToAdd", path2);
+				int Excelcolumn2 = ExcelReader.getLastColumn("AllergyToAdd", path2);
 				System.out.println("Starting column=" + Excelcolumn2);
 
-				int Excelcolumn3 = PCOSExcelReader.getLastColumn("NutsAllergyToAdd", path3);
+				int Excelcolumn3 = ExcelReader.getLastColumn("NutsAllergyToAdd", path3);
 				System.out.println("Starting column=" + Excelcolumn3);
 
 				if ((!isElimIngredExists) && (isAddIngredientExists)) {
 					System.out.println("Added to excel " + recipeName);
-					PCOSExcelWriter excelWriter = new PCOSExcelWriter();
+					ExcelWriter excelWriter = new ExcelWriter();
 					excelWriter.WriteData("Sheet1", 0, Excelcolumn1++, RecipeId, recipeName, RecipeCategory,
 							ingredientList, prepTime, cookingTime, prepMethod, nutrientValue, targetCondition, url,
 							path1);
@@ -287,7 +294,7 @@ public class PCOS extends BaseClass {
 
 				if ((!isElimIngredExists) && (isAllergyIngredientExists)) {
 					System.out.println("Added to excel " + recipeName);
-					PCOSExcelWriter excelWriter = new PCOSExcelWriter();
+					ExcelWriter excelWriter = new ExcelWriter();
 					excelWriter.WriteData("AllergyToAdd", 0, Excelcolumn2++, RecipeId, recipeName, RecipeCategory,
 							ingredientList, prepTime, cookingTime, prepMethod, nutrientValue, targetCondition, url,
 							path2);
@@ -295,7 +302,7 @@ public class PCOS extends BaseClass {
 
 				if ((!isElimIngredExists) && (isnutsAllergyIngredientExists)) {
 					System.out.println("Added to excel " + recipeName);
-					PCOSExcelWriter excelWriter = new PCOSExcelWriter();
+					ExcelWriter excelWriter = new ExcelWriter();
 					excelWriter.WriteData("NutsAllergyToAdd", 0, Excelcolumn3++, RecipeId, recipeName, RecipeCategory,
 							ingredientList, prepTime, cookingTime, prepMethod, nutrientValue, targetCondition, url,
 							path3);

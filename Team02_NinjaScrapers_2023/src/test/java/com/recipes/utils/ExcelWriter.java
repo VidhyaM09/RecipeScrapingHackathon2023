@@ -1,4 +1,4 @@
-package com.recipesforpcoscondition;
+package com.recipes.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,7 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import java.io.FileOutputStream;
 
 
-public class PCOSExcelWriter {
+public class ExcelWriter {
 	public XSSFRow row;
 	public XSSFCell cell;
 
@@ -21,7 +21,6 @@ public class PCOSExcelWriter {
 			String RecipeCategory, String ingredientList, String prepTime, String cookingTime, String prepMethod,
 			String nutrientValue, String targetCondition, String url,String filePath) throws IOException {
 
-	
 
 		FileInputStream inputStream = new FileInputStream(new File(filePath));
 		XSSFWorkbook wb = new XSSFWorkbook(inputStream);
